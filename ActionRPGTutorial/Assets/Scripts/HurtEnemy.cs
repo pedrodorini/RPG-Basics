@@ -8,10 +8,12 @@ public class HurtEnemy : MonoBehaviour
     public GameObject damageBurst;
     public Transform hitPoint;
     public GameObject damageNumber;
+    private PlayerStats thePS;
+    private int currentDamage;
 
     // Use this for initialization
     void Start() {
-
+        thePS = FindObjectOfType<PlayerStats>();
     }
 
     // Update is called once per frame
@@ -21,10 +23,13 @@ public class HurtEnemy : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.tag == "Enemy") {
-            other.gameObject.GetComponent<EnemyHealthManager>().HurtEnemy(damageToGive);
+
+            currentDamage = damageToGive + thePS.currentAttack;
+
+            other.gameObject.GetComponent<EnemyHealthManager>().HurtEnemy(currentDamage);
             Instantiate(damageBurst, hitPoint.position, hitPoint.rotation);
             var clone = (GameObject) Instantiate(damageNumber, hitPoint.position, Quaternion.Euler(Vector3.zero));
-            clone.GetComponent <FloatingNumbers>().damageNumber = damageToGive;
+            clone.GetComponent <FloatingNumbers>().damageNumber = currentDamage;
         }
         
     }
