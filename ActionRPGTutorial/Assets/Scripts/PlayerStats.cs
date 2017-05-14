@@ -41,7 +41,5 @@ public class PlayerStats : MonoBehaviour {
         thePlayerHealth.playerCurrentHealth += (currentHP - HPLevels[currentLevel]);
         currentAttack = attackLevels[currentLevel];
         currentDefence = defencesLevels[currentLevel];
-
-
     }
 }

@@ -7,24 +7,40 @@ public class DialogueManager : MonoBehaviour {
 
     public GameObject dBox;
     public Text dText;
-    public bool dialogActive;
+    public bool dialogueActive;
+    public string[] dialogueLines;
+    public int currentLine;
+    private PlayerController thePlayer;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (dialogActive && Input.GetKeyDown(KeyCode.Space)) {
-            dBox.SetActive(false);
-            dialogActive = false;
+    // Use this for initialization
+    void Start() {
+        thePlayer = FindObjectOfType<PlayerController>();
+    }
+
+    // Update is called once per frame
+    void Update() {
+        if (dialogueActive && Input.GetKeyDown(KeyCode.Space)) {
+            currentLine++;
         }
-	}
+        if (currentLine >= dialogueLines.Length) {
+            dBox.SetActive(false);
+            dialogueActive = false;
+            thePlayer.canMove = true;
+            
+            currentLine = 0;
+        }
+        dText.text = dialogueLines[currentLine];
+    }
 
     public void showBox(string dialogue) {
-        dialogActive = true;
+        dialogueActive = true;
         dBox.SetActive(true);
         dText.text = dialogue;
+    }
+    
+    public void showDialogue() {
+        dialogueActive = true;
+        dBox.SetActive(true);
+        thePlayer.canMove = false;
     }
 }

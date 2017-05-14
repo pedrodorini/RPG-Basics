@@ -6,6 +6,7 @@ public class DialogueHolder : MonoBehaviour {
 
     public string dialogue;
     private DialogueManager dMan;
+    public string[] dialogueLines;
 
 	// Use this for initialization
 	void Start () {
@@ -20,7 +21,15 @@ public class DialogueHolder : MonoBehaviour {
     void OnTriggerStay2D(Collider2D other) {
         if(other.gameObject.name == "Player") {
             if (Input.GetKeyUp(KeyCode.Space)) {
-                dMan.showBox(dialogue);
+                //dMan.showBox(dialogue);
+                if (!dMan.dialogueActive) {
+                    dMan.dialogueLines = dialogueLines;
+                    dMan.currentLine = 0;
+                    dMan.showDialogue();
+                }
+                if(transform.parent.GetComponent<VillagerMovement>() != null) {
+                    transform.parent.GetComponent<VillagerMovement>().canMove = false;
+                }
             }
         }
     }
