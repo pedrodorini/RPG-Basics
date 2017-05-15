@@ -7,6 +7,8 @@ public class QuestManager : MonoBehaviour {
     public QuestObject[] quests;
     public bool[] questCompleted;
     public DialogueManager theDm;
+    public string itemCollected;
+    public string enemyKilled;
 
 
     // Use this for initialization

@@ -15,10 +15,10 @@ public class PlayerStartPoint : MonoBehaviour {
         thePlayer = FindObjectOfType<PlayerController>();
 
         if(thePlayer.startPoint == pointName) {
+            // thePlayer.lastMove = startDirection;
+            thePlayer.transform.position = transform.position;
 
         }
-        thePlayer.transform.position = transform.position;
-        thePlayer.lastMove = startDirection;
 
         theCamera = FindObjectOfType<CameraController>();
         theCamera.transform.position = new Vector3(transform.position.x, transform.position.y,

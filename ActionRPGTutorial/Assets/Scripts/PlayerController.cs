@@ -15,13 +15,16 @@ public class PlayerController : MonoBehaviour {
     private float attackTimeCounter;
     public string startPoint;
     private float currentMoveSpeed;
-    public float diagonalMoveModifier;
+    //public float diagonalMoveModifier;
     public bool canMove;
+    private Vector2 moveInput;
+    private SFXManager sfxMan;
 
 	// Use this for initialization
 	void Start () {
         anim = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
+        sfxMan = FindObjectOfType<SFXManager>();
         if (!playerExists) {
             playerExists = true;
             DontDestroyOnLoad(transform.gameObject);
@@ -29,6 +32,7 @@ public class PlayerController : MonoBehaviour {
             Destroy(gameObject);
         }
         canMove = true;
+        lastMove = new Vector2(0, -1f);
 	}
 	
 	// Update is called once per frame
@@ -40,7 +44,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (!attacking) {
-            if (Input.GetAxisRaw("Horizontal") > 0.5f || Input.GetAxisRaw("Horizontal") < -0.5f) {
+            /*if (Input.GetAxisRaw("Horizontal") > 0.5f || Input.GetAxisRaw("Horizontal") < -0.5f) {
                 //transform.Translate(new Vector3 (Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
                 myRigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * currentMoveSpeed, myRigidbody.velocity.y);
                 playerMoving = true;
@@ -67,16 +71,27 @@ public class PlayerController : MonoBehaviour {
                 currentMoveSpeed = moveSpeed * diagonalMoveModifier;
             } else {
                 currentMoveSpeed = moveSpeed;
+            }*/
+
+            moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+
+            if(moveInput != Vector2.zero) {
+                myRigidbody.velocity = new Vector2(moveInput.x * moveSpeed, moveInput.y * moveSpeed);
+                playerMoving = true;
+                lastMove = moveInput;
+            } else {
+                myRigidbody.velocity = Vector2.zero;
             }
 
+            if (Input.GetKeyDown(KeyCode.J)) {
+                attackTimeCounter = attackTime;
+                attacking = true;
+                myRigidbody.velocity = Vector2.zero;
+                anim.SetBool("Attack", true);
+                sfxMan.playerAttack.Play();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.J)) {
-            attackTimeCounter = attackTime;
-            attacking = true;
-            myRigidbody.velocity = Vector2.zero;
-            anim.SetBool("Attack", true);
-        }
         if(attackTimeCounter > 0){
             attackTimeCounter -= Time.deltaTime;
         }
